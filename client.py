@@ -38,7 +38,6 @@ def cleanup():
     GPIO.cleanup()
 
 
-atexit.register(cleanup())
 while True:
     # set time for photo capture from message
     # take photo at time
@@ -51,3 +50,6 @@ while True:
     elif message[0] == "sync":
         call(["ntpdate", "-u ntp.ubuntu.com"])
         print(time.clock())
+
+
+atexit.register(cleanup)
