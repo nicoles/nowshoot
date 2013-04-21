@@ -1,7 +1,7 @@
 import socket
 import time
 import RPi.GPIO as GPIO
-import os
+from subprocess import call
 
 # ip for camera
 UDP_IP = "10.1.1.39"
@@ -43,5 +43,5 @@ while True:
         shoot()
 
     elif message[0] == "sync":
-        os.system("ntpdate -u ntp.ubuntu.com")
+        call("ntpdate -u ntp.ubuntu.com")
         print(time.clock())
