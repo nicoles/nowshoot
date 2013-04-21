@@ -4,10 +4,9 @@ import time
 autofocus_pin = 11
 shutter_pin = 12
 
-
-def setup_gpio():
-    print "setup gpio"
-
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(autofocus_pin, GPIO.OUT)
+GPIO.setup(shutter_pin, GPIO.OUT)
 
 
 def shoot():
