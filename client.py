@@ -1,6 +1,7 @@
-import cameratasks
+# import cameratasks
 import socket
-import atexit
+# import atexit
+import time
 import RPi.GPIO as GPIO
 
 # ip for camera
@@ -15,10 +16,26 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(autofocus_pin, GPIO.OUT)
 GPIO.setup(shutter_pin, GPIO.OUT)
 
-atexit.register(cameratasks.cleanup())
+# atexit.register(cameratasks.cleanup())
 sock = socket.socket(socket.AF_INET,  # Internet
                      socket.SOCK_DGRAM)  # UDP
 sock.bind((UDP_IP, UDP_PORT))
+
+
+def shoot():
+    GPIO.output(shutter_pin, True)
+    time.sleep(1)
+    GPIO.output(shutter_pin, False)
+
+
+def focus():
+    GPIO.output(autofocus_pin, True)
+    time.sleep(1)
+    GPIO.output(autofocus_pin, False)
+
+
+def cleanup():
+    GPIO.cleanup()
 
 
 while True:
@@ -28,4 +45,4 @@ while True:
     message = data.split()
     if message[0] == "shoot":
         print "received message:", message
-        cameratasks.shoot()
+        shoot()
