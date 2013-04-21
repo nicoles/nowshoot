@@ -1,4 +1,5 @@
 import socket
+import time
 
 # dictionary of cameras & ips in order along rail
 camera_list = {1: '10.1.1.39', 2: '192.168.1.1'}
@@ -30,4 +31,4 @@ def shoot_interval():
         sock.sendto(MESSAGE, (camera_list[camera], UDP_PORT))
 
 sync_clocks()
-shoot_all(14)
+shoot_all(time.time()+1)

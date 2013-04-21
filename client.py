@@ -39,9 +39,12 @@ while True:
     data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
     message = data.split()
     if message[0] == "shoot":
-        print "received message:", message
-        shoot()
+        while time.time() >= message[1]:
+            print time.time()
+            print message[1]
+            shoot()
+            break
 
     elif message[0] == "sync":
-        call("ntpdate -u ntp.ubuntu.com")
+        call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
         print(time.clock())
