@@ -1,19 +1,27 @@
-import cameratasks
+# import cameratasks
+import socket
 
-from flask import Flask
-app = Flask(__name__)
+UDP_IP = "127.0.0.1"
+UDP_PORT = 5005
+
+sock = socket.socket(socket.AF_INET,  # Internet
+                     socket.SOCK_DGRAM)  # UDP
+sock.bind((UDP_IP, UDP_PORT))
+
+while True:
+    data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+    print "received message:", data
+
+# @app.route("/shoot")
+# def shoot():
+#     cameratasks.click(12)
+#     return "shot!"
 
 
-@app.route("/shoot")
-def shoot():
-    cameratasks.click(12)
-    return "shot!"
+# @app.route("/cleanup")
+# def cleanup():
+#     cameratasks.cleanup()
+#     return "cleaned up gpio"
 
-
-@app.route("/cleanup")
-def cleanup():
-    cameratasks.cleanup()
-    return "cleaned up gpio"
-
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()

@@ -1,6 +1,13 @@
-import requests
+import socket
 
-server_list = ['192.168.0.1']
+UDP_IP = "127.0.0.1"
+UDP_PORT = 5005
+MESSAGE = "Hello, World!"
 
-for server_ip in server_list:
-    requests.get('%s:5000/shoot' % server_ip)
+print "UDP target IP:", UDP_IP
+print "UDP target port:", UDP_PORT
+print "message:", MESSAGE
+
+sock = socket.socket(socket.AF_INET,  # Internet
+                     socket.SOCK_DGRAM)  # UDP
+sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
