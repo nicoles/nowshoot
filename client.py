@@ -34,6 +34,7 @@ def focus():
 
 
 def cleanup():
+    print "cleaning up gpio"
     GPIO.cleanup()
 
 
