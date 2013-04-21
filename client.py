@@ -1,40 +1,19 @@
-import RPi.GPIO as GPIO
-import time
-import socket
+import cameratasks
 
-# setup gpio pins
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT)
-GPIO.setup(12, GPIO.OUT)
-
-autofocus_pin = 11
-shutter_pin = 12
+from flask import Flask
+app = Flask(__name__)
 
 
-# clicker
-def click(pin):
-    GPIO.output(pin, True)
-    time.sleep(1)
-    GPIO.output(pin, False)
+@app.route("/shoot")
+def shoot():
+    cameratasks.click(12)
+    return "shot!"
 
 
-# set up listening socket
-broadcast_host = '255.255.255.255'
-broadcast_port = 54545
+@app.route("/cleanup")
+def cleanup():
+    cameratasks.cleanup()
+    return "cleaned up gpio"
 
-broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-try:
-    broadcast_socket.bind((broadcast_host, broadcast_port))
-except:
-    print "failed to bind"
-    broadcast_socket.close()
-
-message = ''
-broadcast_socket.listen(message)
-while message:
-    print "got a message"
-    click(12)
-
-GPIO.cleanup()
+if __name__ == "__main__":
+    app.run()
