@@ -10,6 +10,7 @@ UDP_PORT = 5005
 # setup deal
 autofocus_pin = 11
 shutter_pin = 12
+shoot_time = 0
 
 GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
@@ -38,13 +39,16 @@ while True:
     # take photo at time
     data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
     message = data.split()
-    if message[0] == "shoot":
-        while time.time() >= message[1]:
+
+    if shoot_time:
+        while time.time() >= shoot_time:
+            print shoot_time
             print time.time()
-            print message[1]
             shoot()
             break
 
+    elif message[0] == "shoot":
+        shoot_time = message[1]
     elif message[0] == "sync":
         call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
         print(time.clock())
