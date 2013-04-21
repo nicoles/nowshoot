@@ -1,27 +1,23 @@
-# import cameratasks
+import cameratasks
 import socket
+import atexit
 
-UDP_IP = "127.0.0.1"
+# ip for camera
+UDP_IP = "10.1.1.39"
 UDP_PORT = 5005
 
 sock = socket.socket(socket.AF_INET,  # Internet
                      socket.SOCK_DGRAM)  # UDP
 sock.bind((UDP_IP, UDP_PORT))
 
+# register cleanup on exit
+atexit.register(cameratasks.cleanup())
+
 while True:
+    # set time for photo capture from message
+    # take photo at time
     data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
-    print "received message:", data
-
-# @app.route("/shoot")
-# def shoot():
-#     cameratasks.click(12)
-#     return "shot!"
-
-
-# @app.route("/cleanup")
-# def cleanup():
-#     cameratasks.cleanup()
-#     return "cleaned up gpio"
-
-# if __name__ == "__main__":
-#     app.run()
+    message = data.split()
+    if message[0] == "shoot":
+        print "received message:", message
+        cameratasks.click(12)
