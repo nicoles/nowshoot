@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-import os
+import socket
 
 # setup gpio pins
 GPIO.setmode(GPIO.BOARD)
@@ -18,6 +18,23 @@ def click(pin):
     GPIO.output(pin, False)
 
 
-click(12)
+# set up listening socket
+broadcast_host = '255.255.255.255'
+broadcast_port = 54545
+
+broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+try:
+    broadcast_socket.bind((broadcast_host, broadcast_port))
+except:
+    print "failed to bind"
+    broadcast_socket.close()
+
+message = ''
+broadcast_socket.listen(message)
+while message:
+    print "got a message"
+    click(12)
 
 GPIO.cleanup()
