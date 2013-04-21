@@ -1,8 +1,7 @@
 import socket
-import atexit
 import time
 import RPi.GPIO as GPIO
-from subprocess import call
+import os
 
 # ip for camera
 UDP_IP = "10.1.1.39"
@@ -12,6 +11,7 @@ UDP_PORT = 5005
 autofocus_pin = 11
 shutter_pin = 12
 
+GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(autofocus_pin, GPIO.OUT)
 GPIO.setup(shutter_pin, GPIO.OUT)
@@ -33,11 +33,6 @@ def focus():
     GPIO.output(autofocus_pin, False)
 
 
-def cleanup():
-    print "cleaning up gpio"
-    GPIO.cleanup()
-
-
 while True:
     # set time for photo capture from message
     # take photo at time
@@ -48,8 +43,5 @@ while True:
         shoot()
 
     elif message[0] == "sync":
-        call(["ntpdate", "-u ntp.ubuntu.com"])
+        os.system("ntpdate -u ntp.ubuntu.com")
         print(time.clock())
-
-
-atexit.register(cleanup)
