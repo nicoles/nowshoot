@@ -35,18 +35,22 @@ def focus():
 
 
 while True:
+    print "looped"
     if shoot_time > 0:
+        print "inside shoot time %s" % shoot_time
         while time.time() >= shoot_time:
             print shoot_time
             print time.time()
             shoot()
             shoot_time = 0
     else:
+        "inside reciever"
         data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
         message = data.split()
 
         if message[0] == "shoot":
             shoot_time = message[1]
+            print shoot_time
         elif message[0] == "sync":
             call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
             print(time.clock())
