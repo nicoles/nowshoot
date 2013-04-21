@@ -30,5 +30,4 @@ def shoot_interval():
     for camera in camera_list:
         sock.sendto(MESSAGE, (camera_list[camera], UDP_PORT))
 
-sync_clocks()
 shoot_all(time.time()+1)
