@@ -34,23 +34,24 @@ def focus():
     GPIO.output(autofocus_pin, False)
 
 
+def update_clock():
+    call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
+
 while True:
-    print "looped"
-    if shoot_time > 0:
-        print "inside shoot time %s" % shoot_time
-        while time.time() >= shoot_time:
-            print shoot_time
-            print time.time()
+    while shoot_time > 0:
+        now = time.time()
+        if now > shoot_time:
             shoot()
             shoot_time = 0
-    else:
-        "inside reciever"
-        data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
-        message = data.split()
 
-        if message[0] == "shoot":
-            shoot_time = message[1]
-            print shoot_time
-        elif message[0] == "sync":
-            call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
-            print(time.clock())
+    data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+    message = data.split()
+
+    if message[0] == "shoot":
+        shoot_time = float(message[1])
+        print "recieved shoot %s" % shoot_time
+        if shoot_time - time.time() > 5:
+            shoot_time = 0
+    elif message[0] == "sync":
+        update_clock()
+        print "recieved clock update"
