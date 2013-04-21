@@ -6,9 +6,8 @@ shutter_pin = 12
 
 
 def setup_gpio():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(autofocus_pin, GPIO.OUT)
-    GPIO.setup(shutter_pin, GPIO.OUT)
+    print "setup gpio"
+
 
 
 def shoot():
