@@ -35,20 +35,18 @@ def focus():
 
 
 while True:
-    # set time for photo capture from message
-    # take photo at time
-    data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
-    message = data.split()
-
-    if shoot_time:
+    if shoot_time > 0:
         while time.time() >= shoot_time:
             print shoot_time
             print time.time()
             shoot()
-            break
+            shoot_time = 0
+    else:
+        data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+        message = data.split()
 
-    elif message[0] == "shoot":
-        shoot_time = message[1]
-    elif message[0] == "sync":
-        call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
-        print(time.clock())
+        if message[0] == "shoot":
+            shoot_time = message[1]
+        elif message[0] == "sync":
+            call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
+            print(time.clock())
