@@ -1,12 +1,20 @@
 import cameratasks
 import socket
 import atexit
+import RPi.GPIO as GPIO
 
 # ip for camera
 UDP_IP = "10.1.1.39"
 UDP_PORT = 5005
 
 # setup deal
+autofocus_pin = 11
+shutter_pin = 12
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(autofocus_pin, GPIO.OUT)
+GPIO.setup(shutter_pin, GPIO.OUT)
+
 atexit.register(cameratasks.cleanup())
 sock = socket.socket(socket.AF_INET,  # Internet
                      socket.SOCK_DGRAM)  # UDP
