@@ -6,12 +6,13 @@ import atexit
 UDP_IP = "10.1.1.39"
 UDP_PORT = 5005
 
+# setup deal
+cameratasks.setup_gpio()
+atexit.register(cameratasks.cleanup())
 sock = socket.socket(socket.AF_INET,  # Internet
                      socket.SOCK_DGRAM)  # UDP
 sock.bind((UDP_IP, UDP_PORT))
 
-# register cleanup on exit
-atexit.register(cameratasks.cleanup())
 
 while True:
     # set time for photo capture from message
@@ -20,4 +21,4 @@ while True:
     message = data.split()
     if message[0] == "shoot":
         print "received message:", message
-        cameratasks.click(12)
+        cameratasks.shoot()

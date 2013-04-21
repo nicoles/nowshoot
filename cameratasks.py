@@ -1,22 +1,27 @@
 import RPi.GPIO as GPIO
 import time
 
-# setup gpio pins
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT)
-GPIO.setup(12, GPIO.OUT)
-
 autofocus_pin = 11
 shutter_pin = 12
 
 
-# clicker
-def click(pin):
-    GPIO.output(pin, True)
+def setup_gpio():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(autofocus_pin, GPIO.OUT)
+    GPIO.setup(shutter_pin, GPIO.OUT)
+
+
+def shoot():
+    GPIO.output(shutter_pin, True)
     time.sleep(1)
-    GPIO.output(pin, False)
+    GPIO.output(shutter_pin, False)
 
 
-# cleanup
+def focus():
+    GPIO.output(autofocus_pin, True)
+    time.sleep(1)
+    GPIO.output(autofocus_pin, False)
+
+
 def cleanup():
     GPIO.cleanup()
