@@ -1,7 +1,8 @@
 import socket
 import time
 import RPi.GPIO as GPIO
-from subprocess import call
+import subprocess
+import vendor.CameraPi.gphoto as gphoto
 
 # ip for camera
 UDP_IP = "10.1.1.39"
@@ -35,7 +36,7 @@ def focus():
 
 
 def update_clock():
-    call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
+    subprocess.call("ntpdate" + " -u ntp.ubuntu.com", shell=True)
 
 while True:
     while shoot_time > 0:
@@ -55,3 +56,5 @@ while True:
     elif message[0] == "sync":
         update_clock()
         print "recieved clock update"
+    elif message[0] == "reset":
+        gphoto.resetusb()
